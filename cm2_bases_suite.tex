@@ -39,7 +39,7 @@
 \title[M1 MAS -- Python -- Bases (suite)]{CM 2 - Bases (suite)}
 \subtitle{Programmation Python -- Master 1 MAS}
 \author{Romain Tavenard}
-\date{2025}
+\date{2026}
 \institute{%
 \hypersetup{urlcolor=.}
 \makebox[2.2ex][c]{\faEnvelope}\enspace\href{mailto:romain.tavenard@univ-rennes2.fr}{\texttt{romain.tavenard@univ-rennes2.fr}}\\%
@@ -149,12 +149,12 @@
       print(math.pi)
     \end{minted}
   \end{beamercodeblock}
-  
+
   \bigskip
 
   \begin{quote}
     Qu'est-ce qui pourrait selon vous expliquer que, en exécutant le fichier ``cm2.py'' ci-dessus, on obtienne l'erreur :
-  
+
     \begin{beamercodeblock}
       \begin{minted}[fontsize=\footnotesize]{python}
         Traceback (most recent call last):
@@ -164,6 +164,48 @@
       \end{minted}
     \end{beamercodeblock}
   \end{quote}
+\end{frame}
+
+
+\begin{frame}[fragile]{Structurer son fichier \\ \texttt{if \_\_name\_\_ == "\_\_main\_\_"}}
+
+  Lors de l'import d'un module, \alert{tout le code au niveau du module est exécuté}.
+
+  \begin{beamercodeblock}
+    \begin{minted}[fontsize=\footnotesize, label=mon_module.py]{python}
+      def ma_fonction(x):
+          return x * 2
+
+      print(ma_fonction(5))  # Exécuté à l'import ! (indésirable)
+    \end{minted}
+  \end{beamercodeblock}
+
+  \pause
+
+  Solution : protéger les appels avec \mintinline{python}|if __name__ == "__main__"| :
+
+  \begin{beamercodeblock}
+    \begin{minted}[fontsize=\footnotesize, label=mon_module.py]{python}
+      def ma_fonction(x):
+          return x * 2
+
+      if __name__ == "__main__":
+          print(ma_fonction(5))  # Exécuté seulement si lancé directement
+    \end{minted}
+  \end{beamercodeblock}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Structurer son fichier \\ \texttt{if \_\_name\_\_ == "\_\_main\_\_"}}
+
+  \begin{itemize}
+    \item Quand on \emph{lance} le fichier : \mintinline{python}|__name__| vaut \mintinline{python}|"__main__"|
+    \item Quand on \emph{importe} le fichier : \mintinline{python}|__name__| vaut le nom du module
+  \end{itemize}
+
+  $\Rightarrow$ \textbf{Bonne pratique :} toujours placer les appels/tests dans ce bloc.
+
 \end{frame}
 
 

@@ -39,7 +39,7 @@
 \title[M1 MAS -- Python -- Fichiers]{CM 7 - L'interaction avec des données en ligne}
 \subtitle{Programmation Python -- Master 1 MAS}
 \author{Romain Tavenard}
-\date{2025}
+\date{2026}
 \institute{%
 \hypersetup{urlcolor=.}
 \makebox[2.2ex][c]{\faEnvelope}\enspace\href{mailto:romain.tavenard@univ-rennes2.fr}{\texttt{romain.tavenard@univ-rennes2.fr}}\\%
@@ -95,6 +95,48 @@
 
   Utile pour contourner certains filtres basiques des fournisseurs de données.
 \end{frame}
+
+\begin{frame}[fragile]{Gestion des erreurs HTTP}
+
+  \mintinline{python}|requests.get(url)| ne lève \alert{pas d'exception} si le serveur répond avec une erreur (404, 500...).
+
+  \begin{beamercodeblock}
+    \begin{minted}[fontsize=\footnotesize]{python}
+      # Mauvaise pratique : plante silencieusement si erreur HTTP
+      data = requests.get(url).json()
+    \end{minted}
+  \end{beamercodeblock}
+
+  \pause
+
+  \begin{beamercodeblock}
+    \begin{minted}[fontsize=\footnotesize]{python}
+      # Bonne pratique
+      reponse = requests.get(url)
+      reponse.raise_for_status()  # Lève une exception si code >= 400
+      data = reponse.json()
+    \end{minted}
+  \end{beamercodeblock}
+\end{frame}
+
+% \begin{frame}[fragile]{Gestion des erreurs HTTP}
+%   Pour aller plus loin, on peut encapsuler dans un \mintinline{python}|try| / \mintinline{python}|except| :
+
+%   \begin{beamercodeblock}
+%     \begin{minted}[fontsize=\footnotesize]{python}
+%       try:
+%           reponse = requests.get(url)
+%           reponse.raise_for_status()
+%           data = reponse.json()
+%       except requests.exceptions.HTTPError as e:
+%           print(f"Erreur HTTP : {e}")
+%       except requests.exceptions.ConnectionError:
+%           print("Impossible de joindre le serveur")
+%     \end{minted}
+%   \end{beamercodeblock}
+
+% \end{frame}
+
 
 \begin{frame}{Clés d'API}
   De nombreux fournisseurs de données demandent une clé d'API :
