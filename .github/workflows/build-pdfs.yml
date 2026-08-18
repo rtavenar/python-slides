@@ -1,0 +1,59 @@
+name: Build slides PDFs
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install TeX Live and Pygments
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            texlive-luatex \
+            texlive-pictures \
+            texlive-plain-generic \
+            latexmk \
+            python3-pygments
+
+      - name: Build PDFs
+        run: |
+          mkdir -p site
+          for f in cm*.tex; do
+            name="${f%.tex}"
+            latexmk "$f"
+            cp "${name}.pdf" "site/${name}.pdf"
+          done
+
+      - name: Generate index page
+        run: |
+          {
+            echo "<!doctype html><html><head><meta charset=\"utf-8\"><title>Python slides</title></head><body>"
+            echo "<h1>Python slides</h1><ul>"
+            for f in site/*.pdf; do
+              base="$(basename "$f")"
+              echo "<li><a href=\"${base}\">${base}</a></li>"
+            done
+            echo "</ul></body></html>"
+          } > site/index.html
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          publish_branch: gh-pages
