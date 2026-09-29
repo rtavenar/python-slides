@@ -132,20 +132,22 @@
 \end{frame}
 
 \begin{frame}[fragile]{Accéder à une valeur via sa clé}
-  Si l'on souhaite accéder à la valeur associée à la clé \mintinline{python}|"xyz"|, pas besoin de parcourir !
+  Si l'on souhaite accéder à la valeur associée à la clé \mintinline{python}|"langue"|, pas besoin de parcourir !
 
   \pause
   
   \begin{beamercodeblock}
     \begin{minted}[fontsize=\footnotesize]{python}
-      # Option 1
-      if "xyz" in mon_dico.keys():
-        print(mon_dico["xyz"])
-      else:
-        print("Clé 'xyz' absente du dico")
+      prefs = {"theme": "sombre", "taille_police": 14}
 
-      # Option 2 (A TOUJOURS FAVORISER)
-      print(mon_dico.get("xyz", "Clé 'xyz' absente du dico"))
+      # Option 1
+      if "langue" in prefs:
+        langue = prefs["langue"]
+      else:
+        langue = "fr"
+
+      # Option 2 (À PRIVILÉGIER)
+      langue = prefs.get("langue", "fr")
     \end{minted}
   \end{beamercodeblock}
 
